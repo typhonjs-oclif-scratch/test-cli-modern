@@ -1,4 +1,7 @@
 # test-cli-modern
+[![Build Status](https://github.com/typhonjs-oclif/test-cli-modern/workflows/CI/CD/badge.svg)](#)
+[![Coverage](https://img.shields.io/codecov/c/github/typhonjs-oclif/test-cli-modern.svg)](https://codecov.io/github/typhonjs-oclif/test-cli-modern)
+
 Provides a modern test CLI for ESM changes to @oclif v2 against Node 12.20.0+, 14.13+, 15+
 
 There are three test suites for ESM support for Oclif v2:
@@ -44,3 +47,12 @@ is utilized. The local bootstrap code, `./bin/run.js` is invoked along with the 
 the CLI that has been installed via a Github link developer dependency and finally in the Github Action where the test
 CLI is installed globally it is invoked as well. These tests cover all execution possibilities for the CLI across
 MacOS, Ubuntu, and Windows and what Node versions one can create a modern ESM Oclif CLI that requires no workarounds.
+
+----
+### Code Coverage
+
+[nyc](https://www.npmjs.com/package/nyc) does not support code coverage for ESM based tests in Mocha presently. The
+solution is to use [c8](https://www.npmjs.com/package/c8) which does work with ESM tests and is a drop in replacement
+for `nyc`. This repo uses Codecov to publish a [coverage report](https://codecov.io/github/typhonjs-oclif/test-cli-modern)
+in the GH Action. When running tests locally a `./coverage` directory is created that contains the coverage report. As
+can be seen in the report full coverage of both the CLI command / init files and bin bootstrap occurs. 
