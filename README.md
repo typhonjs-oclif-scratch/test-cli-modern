@@ -1,30 +1,27 @@
 # test-cli-modern
-[![Build Status](https://github.com/typhonjs-oclif/test-cli-modern/workflows/CI/CD/badge.svg)](#)
-[![Coverage](https://img.shields.io/codecov/c/github/typhonjs-oclif/test-cli-modern.svg)](https://codecov.io/github/typhonjs-oclif/test-cli-modern)
+[![Build Status](https://github.com/typhonjs-oclif-scratch/test-cli-modern/workflows/CI/CD/badge.svg)](#)
+[![Coverage](https://img.shields.io/codecov/c/github/typhonjs-oclif-scratch/test-cli-modern.svg)](https://codecov.io/github/typhonjs-oclif-scratch/test-cli-modern)
 
-Provides a modern test CLI for ESM changes to @oclif v2 against Node 12.20.0+, 14.13+, 15+
+Provides a modern test CLI for ESM support to @oclif v2 against Node `12.20.0+` and `14.13+`.
 
 There are three test suites for ESM support for Oclif v2:
 - test-cli-modern (this one) / everything works as expected
-- [test-cli-cjs-interop](https://github.com/typhonjs-oclif/test-cli-cjs-interop) / workaround for CJS named exports
-- [test-cli-experimental-modules](https://github.com/typhonjs-oclif/test-cli-experimental-modules) / usage of
-  --experimental-modules + workaround for CJS named exports
+- [test-cli-cjs-interop](https://github.com/typhonjs-oclif-scratch/test-cli-cjs-interop) / workaround for CJS named exports (widest Node support)
+- [test-cli-experimental-modules](https://github.com/typhonjs-oclif-scratch/test-cli-experimental-modules) / usage of
+  --experimental-modules + workaround for CJS named exports (not recommended / demo only)
 
 This test CLI and Github Action CI / CD test suite covers the versions of Node that fully support modern ESM without
 requiring `--experimental-modules` or the CJS named export workaround starting at `12.20.0` and all of `14.13.0`.
 
 A [discussion issue](https://github.com/oclif/core/issues/130) about ESM support is open on the `@oclif/core` repo.
 
-Click here to view the [latest Action CI / CD run](https://github.com/typhonjs-oclif/test-cli-modern/actions)
+Click here to view the [latest Action CI / CD run](https://github.com/typhonjs-oclif-scratch/test-cli-modern/actions)
 (requires a valid Github login). The test suite is run in a matrix supporting `macos-latest`, `ubuntu-latest`, `windows-latest`
-on Node versions `12.20.0`, `12.x`, `14.13.0`, `14.x`, `15.0.0` and `15.x`.
+on Node versions `12.20.0`, `12.x`, `14.13.0`, `14.x`, `16.0.0` and `16.x`.
 
-All the test suites use a fork of [@oclif/core](https://github.com/oclif/core) that can be [found here](https://github.com/typhonjs-oclif-scratch/core-esm)
-and subsequently a compiled version with the lib directory committed to Github is [found here](https://github.com/typhonjs-oclif/core-esm).
-The latter Github repo is linked in `package.json` as `"@oclif/core": "git+https://github.com/typhonjs-oclif/core-esm.git"`.
+All the test suites use [@oclif/core](https://github.com/oclif/core) `0.5.10+`.
 
-For testing the CLI is invoked locally, via NPM script (installed as a developer dependency), and installed as a global
-dependency in the Github Action along with a programmatic test.
+For testing the CLI is invoked locally along with a programmatic tests.
 
 It should be noted that everything is ESM from the test CLI to the test suite itself. This test suite verifies which 
 versions of Node support what can be considered as modern ESM not requiring any workarounds. This "modern" version is 
@@ -40,19 +37,37 @@ file is straightforward and invokes Node as per normal.
 ----
 ### Mocha Tests
 
-The test source contains a [programmatic test](https://github.com/typhonjs-oclif/test-cli-modern/blob/main/test/src/programmatic.test.js)
-and [spawn tests](https://github.com/typhonjs-oclif/test-cli-modern/blob/main/test/src/spawn.test.js). To
-accomplish this cross platform with Windows [cross-spawn](https://www.npmjs.com/package/cross-spawn)
-is utilized. The local bootstrap code, `./bin/run.js` is invoked along with the NPM script `run-npm-cli` that invokes
-the CLI that has been installed via a Github link developer dependency and finally in the Github Action where the test
-CLI is installed globally it is invoked as well. These tests cover all execution possibilities for the CLI across
-MacOS, Ubuntu, and Windows and what Node versions one can create a modern ESM Oclif CLI that requires no workarounds.
+The test source contains a [programmatic test](https://github.com/typhonjs-oclif-scratch/test-cli-modern/blob/main/test/src/programmatic.test.js)
+and [spawn tests](https://github.com/typhonjs-oclif-scratch/test-cli-modern/blob/main/test/src/spawn.test.js). To
+accomplish the spawn test cross-platform with Windows [cross-spawn](https://www.npmjs.com/package/cross-spawn)
+is utilized and the local bootstrap code, `./bin/run.js` is invoked. The programmatic tests demonstrate [fancy-test](https://www.npmjs.com/package/fancy-test)
+and use of [chai-as-promised](https://www.npmjs.com/package/chai-as-promised) invoking the main package export
+via `./src/index.js`. These tests cover execution for the CLI across MacOS, Ubuntu, and Windows with the Node versions 
+one can create a modern ESM Oclif CLI that requires no workarounds.
 
 ----
 ### Code Coverage
 
 [nyc](https://www.npmjs.com/package/nyc) does not support code coverage for ESM based tests in Mocha presently. The
 solution is to use [c8](https://www.npmjs.com/package/c8) which does work with ESM tests and is a drop in replacement
-for `nyc`. This repo uses Codecov to publish a [coverage report](https://codecov.io/github/typhonjs-oclif/test-cli-modern)
+for `nyc`. This repo uses Codecov to publish a [coverage report](https://codecov.io/github/typhonjs-oclif-scratch/test-cli-modern)
 in the GH Action. When running tests locally a `./coverage` directory is created that contains the coverage report. As
 can be seen in the report full coverage of both the CLI command / init files and bin bootstrap occurs. 
+
+----
+### Deploying an ESM CLI
+
+While there is newly added ESM support to `@oclif/core v0.5.10+` the rest of the Oclif v2 infrastructure and plugins are
+not updated to use `@oclif/core` yet. This is somewhat problematic in using `@oclif/dev-cli v1.26.0` and in particular the
+`oclif-dev manifest` CLI command in the `prepack` or `prepublishOnly` NPM scripts. There is a workaround though to
+publish ESM Oclif v2 CLIs using the `oclif-dev manifest` command. It requires installing all dependencies from Oclif v2
+then manually updating `@oclif/config` which is the v1 version depended on by `@oclif/dev-cli`. ESM support has been
+back-ported with a hard fork of `@oclif/config v1` in this [repository](https://github.com/typhonjs-oclif-scratch/configv1).
+
+The contents of the lib directory from the above repository needs to be copied into `node_modules/@oclif/config/lib` as
+it adds ESM config loading support to `@oclif/config v1`
+
+Note: This workaround only works with `oclif-dev manifest` command and not the README command.
+
+A comment tracking the current best practice or procedure to publish an ESM Oclif v2 CLI is posted [here](https://github.com/oclif/core/issues/130#issuecomment-852454758).
+When Oclif v2 fully launches no workarounds will be necessary.
