@@ -1,27 +1,34 @@
 {
-  "name": "@typhonjs-oclif/test-cli-modern",
-  "description": "Provides a modern test CLI for ESM changes to @oclif v2 against Node 12.20+, 14.13+, 15.x",
+  "name": "test-cli-modern",
+  "description": "Provides a modern test CLI for ESM changes to @oclif v2 against Node 12.20+ & 14.13+",
   "version": "0.0.0",
-  "author": "typhonrt",
+  "author": "Michael Leahy <support@typhonjs.io> (https://github.com/typhonrt)",
   "private": true,
+  "main": "src/index.js",
+  "module": "src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
   "bin": {
     "testcli-modern": "./bin/run.js"
   },
   "type": "module",
-  "bugs": "https://github.com/typhonjs-oclif/test-cli-modern/issues",
+  "bugs": "https://github.com/typhonjs-oclif-scratch/test-cli-modern/issues",
   "dependencies": {
-    "@oclif/core": "git+https://github.com/typhonjs-oclif/core-esm.git"
+    "@oclif/core": "^0.5.0"
   },
   "devDependencies": {
+    "@oclif/dev-cli": "^1.26.0",
     "@rauschma/stringio": "^1.4.0",
     "@typhonjs-config/eslint-config": "^0.2.0",
-    "@typhonjs-oclif/test-cli-modern": "typhonjs-oclif/test-cli-modern",
-    "c8": "^7.6.0",
+    "c8": "^7.7.2",
     "chai": "^4.3.4",
-    "codecov": "^3.8.1",
+    "chai-as-promised": "^7.1.1",
+    "codecov": "^3.8.2",
     "cross-spawn": "^7.0.3",
-    "eslint": "^7.22.0",
-    "mocha": "^8.3.2"
+    "eslint": "^7.27.0",
+    "fancy-test": "^1.4.10",
+    "mocha": "^8.4.0"
   },
   "engines": {
     "node": ">=12.20.0 <13.0.0 || >=14.13.0"
@@ -32,7 +39,7 @@
     "/oclif.manifest.json",
     "/src"
   ],
-  "homepage": "https://github.com/typhonjs-oclif/test-cli-modern",
+  "homepage": "https://github.com/typhonjs-oclif-scratch/test-cli-modern#readme",
   "keywords": [
     "oclif",
     "test",
@@ -49,11 +56,10 @@
     },
     "bin": "testcli-modern"
   },
-  "repository": "typhonjs-oclif/test-cli-modern",
+  "repository": "github:typhonjs-oclif-scratch/test-cli-modern",
   "scripts": {
     "run-local-*nix": "./bin/run.js test",
     "run-local-windows": "cd bin/ && run.cmd test",
-    "run-npm-cli": "testcli-modern test",
     "eslint": "eslint .",
     "postpack": "rm -f oclif.manifest.json",
     "posttest": "npm run eslint",
