@@ -13,7 +13,9 @@ There are three test suites for ESM support for Oclif v2:
 This test CLI and Github Action CI / CD test suite covers the versions of Node that fully support modern ESM without
 requiring `--experimental-modules` or the CJS named export workaround starting at `12.20.0` and all of `14.13.0`.
 
-A [discussion issue](https://github.com/oclif/core/issues/130) about ESM support is open on the `@oclif/core` repo.
+A [discussion issue](https://github.com/oclif/core/issues/130) about ESM support has concluded with a merge of ESM
+support on the `@oclif/core` repo. Please see this [comment](https://github.com/oclif/core/issues/130#issuecomment-852454758)
+on updated details on how to publish an ESM Oclif v2 CLI before the full launch of Oclif v2.
 
 Click here to view the [latest Action CI / CD run](https://github.com/typhonjs-oclif-scratch/test-cli-modern/actions)
 (requires a valid Github login). The test suite is run in a matrix supporting `macos-latest`, `ubuntu-latest`, `windows-latest`
