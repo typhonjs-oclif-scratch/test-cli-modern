@@ -1,33 +1,24 @@
-import url                 from 'url';
+import fancy               from 'fancy-test';
+import { assert, expect }  from 'chai';
+import { Errors }          from '@oclif/core';
 
-import { assert }          from 'chai';
+import testcli             from '../../src/index.js';
 
-import { run, Errors }     from '@oclif/core';
-
-describe('Programmatic Test CLI', () =>
+/**
+ * This tests utilize the main / programmatic export of the module.
+ */
+describe('Programmatic (API):', () =>
 {
-   let captureLog = '', originalLog;
-
-   beforeEach(() =>
+   it('bad command (shows how to use chai-as-promised)', async () =>
    {
-      originalLog = console.log;
-      console.log = (log) => { originalLog(log); captureLog += log; };
+      await expect(testcli('bad')).to.be.rejectedWith(Errors.CLIError, 'command bad not found');
    });
 
-   afterEach(() =>
-   {
-      console.log = originalLog;
-      captureLog = '';
-   });
-
-   it('run command test', (done) =>
-   {
-      run(['test'], url.fileURLToPath(import.meta.url))
-         .then(() =>
-         {
-            assert(captureLog, 'ran init hookran test command');
-            done();
-         })
-         .catch(Errors.handle);
-   });
+   fancy.fancy
+      .stdout()
+      .do(async () => await testcli('test'))
+      .it('run command test', (output) =>
+      {
+         assert.strictEqual(output.stdout, 'ran init hook\nran test command\n');
+      });
 });
